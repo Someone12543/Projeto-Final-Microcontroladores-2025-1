@@ -7,6 +7,6 @@ class ChatController:
     @classmethod
     def get_chats(cls, chat_id: GetChat) -> List[dict]:
 
-        teste_retorno = {"chat_id": chat_id, "result": }
+        teste_retorno = {"chat_id": chat_id, "result": "bruh"}
 
-        return
+        return teste_retorno
