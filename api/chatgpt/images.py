@@ -21,7 +21,9 @@ detail to have it be identified as the subject, MEDIUM is a reasonable amount \
 of detail, but not much, and HIGH is a little more detail than MEDIUM, making \
 sure it's not too realistic; 'Colors' is the selection of colors to generate \
 the image with, having the lines be colored where you believe the colors should go. \
-Make sure to not fill in any elements when coloring, limiting the image to only lines\n\
+Make sure to not fill in any elements when coloring, limiting the image to only lines. \
+Make sure the lines are not too dense in general, no 2 color lines pass over \
+eachother, and guarante any non-drawn part of the image is purely white.\n\
 Subject: " + user_prompt + "\n\
 Detail: " + quality + "\n\
 Colors: " + colors + "\n"
