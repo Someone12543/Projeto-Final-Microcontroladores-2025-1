@@ -78,18 +78,16 @@ void move_x_y(int distx, int disty) {
 // =============================== Drawer plotter ===============================
 
 int get_integer() {
-  String input = Serial.readStringUntil('\n');
-  input.trim();
+  String dados = Serial.readStringUntil('\n');
+  dados.trim();
 
-  return input.toInt();
+  return dados.toInt();
 }
 
 bool is_running = false;
 int move_pos = 0;
 
-int posicao_inicial(String coordinates) {
-  servos[servo_atual].write(180);
-
+void move_posicao(String coordinates) {
   int pos = 0;
   int x = 0;
 
@@ -123,7 +121,6 @@ int posicao_inicial(String coordinates) {
 
   // Cheguei na posição inicial
   Serial.println(String(x) + "," + String(y));
-  return pos;
 }
 
 // =============================== Funcao de setup ===============================
@@ -205,62 +202,35 @@ void setup() {
 // =============================== Funcao de loop ===============================
 
 void loop() {
+  for (int i = 0; i < 3; i++) {
+    servos[i].write(180);
+  }
+
   if (Serial.available()) {
+    servos[servo_atual].write(180);
+    
+    delay(100);
+
+    servo_atual = get_integer();
+
+    while (!Serial.available());
+
     int qtd = get_integer();
 
-    int i = 0;
+    for (int i = 0; i < qtd; i++) {
+      while (!Serial.available());
 
-    while (!Serial.available()) {
-      continue;
-    }
+      String coordinates = Serial.readStringUntil('\n');
+      coordinates.trim();
 
-    String coordinates = Serial.readStringUntil('\n');
-    coordinates.trim();
-
-    // Setar a posição inicial
-    finished_x = false;
-    finished_y = false;
-
-    int pos = posicao_inicial(coordinates);
-    coordinates = coordinates.substring(pos + 1);
-    Serial.println(coordinates);
-
-    for (int i = 1; i < qtd; i++) {
+      // Setar a posição inicial
       finished_x = false;
       finished_y = false;
 
-      int x = 0;
-      while (coordinates[pos] != ',') {
-        x = 10 * x + coordinates.substring(pos, pos + 1).toInt();
-        pos++;
+      if (i > 0) {
+        servos[servo_atual].write(limit_servo);
       }
-      move_x(x);
-
-      coordinates = coordinates.substring(pos+1);
-      
-      pos = 0;
-      int y = 0;
-      while (coordinates[pos] != ' ' && pos < coordinates.length()) {
-        y = 10 * y + coordinates.substring(pos, pos + 1).toInt();
-        pos++;
-      }
-      move_y(y);
-
-      coordinates = coordinates.substring(pos + 1);
-
-      while (!finished_y || !finished_x) {
-        if (!motor_x.run()) {
-          finished_x = true;
-          motor_x.disableOutputs();
-        }
-
-        if (!run_y()) {
-          finished_y = true;
-          disable_y();
-        }
-      }
-
-      Serial.println(String(x) + "," + String(y));
+      move_posicao(coordinates);
     }
   }
 }
