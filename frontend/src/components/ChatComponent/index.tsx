@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {type JSX, useState} from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -6,11 +6,12 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
-import type {Theme} from "@mui/material";
+import {Button, Stack, type Theme} from "@mui/material";
+import {MenuComponent} from "../MenuComponent/Menu.tsx";
 
 type Message = {
     sender: 'user' | 'printer';
-    content: string;
+    content: string | JSX.Element;
     timestamp: string;
 };
 
@@ -19,10 +20,13 @@ type Props = {
     chatLog: Message[];
     onSend: (message: string) => void;
     theme: Theme;
+    handleOpenModal: (message: string) => void;
 };
 
-export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme }) => {
+export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme, handleOpenModal }) => {
     const [input, setInput] = useState('');
+    // const [nivelDetalhe, setNivelDetalhe] = useState(NiveisDetalhe.medio);
+    // const [cores, setCores] = useState([Cores.RED]);
 
     const handleSend = () => {
         const trimmed = input.trim();
@@ -31,6 +35,8 @@ export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme }) =
             setInput('');
         }
     };
+
+
 
     return (
         <Box
@@ -42,9 +48,7 @@ export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme }) =
             }}
             theme={theme}
         >
-            <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
-                Chat impressora: id #{id}
-            </Typography>
+            <MenuComponent />
 
             <Paper
                 sx={{
@@ -83,6 +87,13 @@ export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme }) =
                                 }}
                             >
                                 <Typography variant="body2">{msg.content}</Typography>
+                                { msg.sender === 'printer' ?
+                                <Stack gap={2} sx={{display:'flex', flexDirection:'row'}}>
+                                    <Button variant="filled">Aceitar</Button>
+                                    <Button variant="filled">Refazer</Button>
+                                    <Button id={"editar"} key={"editar"} variant="filled" onClick={()=>handleOpenModal("apple_mock.png")}>Editar</Button>
+                                </Stack>: ""
+                                }
                             </Box>
                             <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
                                 {new Date(msg.timestamp).toLocaleTimeString()}
