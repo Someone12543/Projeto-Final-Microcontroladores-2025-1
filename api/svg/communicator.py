@@ -15,28 +15,19 @@ class Svg_communicator:
         
         svg = SVG.parse(filename)
         for element in svg:
+            meu_serial.write(("0\n").encode("UTF-8"))
+            sleep(0.05)
+            
+            qtd = str(len(element.points)) + "\n"
+            sleep(0.05)
+            
+            meu_serial.write( (qtd).encode("UTF-8"))
+            
             #meu_serial.write( str(len(element.points)).encode("UTF-8") )
             #meu_serial.write( str(element.stroke).encode("UTF-8") )
-            
-#             listinha = ''
-#             
-#             for point in element.points:
-#                 listinha += str(int(point.x)) + "," + str(int(point.y)) + " "
-                
-                
-#             meu_serial.write(listinha.encode("UTF-8"))
-#             
-#             for i in range(qtd):
-#                 msg = ""
-#                 while True:
-#                     msg = meu_serial.readline().decode().strip()
-#                     if msg:
-#                         break
-#                 print(msg)
-#                 
+                   
             
             for point in element.points:
-                meu_serial.write(("1\n").encode("UTF-8"))
                 ponto = str(int(point.x)) + ',' + str(int(point.y)) + '\n'
                 meu_serial.write( (ponto).encode("UTF-8") )
                 
@@ -44,15 +35,13 @@ class Svg_communicator:
                     texto_recebido = meu_serial.readline().decode(errors='ignore').strip()
                     if texto_recebido:
                         print(texto_recebido)
-                        if texto_recebido == "167,1061":
-                            print(point.x, point.y)
                         break
             print(count)
             count += 1
-                    
-                
-                
+            sleep(0.3)
+                             
 
 communicator = Svg_communicator()
 
 communicator.communicate("maca.svg")
+
