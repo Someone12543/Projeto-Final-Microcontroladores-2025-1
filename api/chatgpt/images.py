@@ -1,3 +1,4 @@
+'''
 import openai
 from dotenv import load_dotenv
 import base64
@@ -12,9 +13,10 @@ class ImageGenerator():
 
         openai.api_key = os.getenv("OPENAI_API_KEY")
 
-        client = openai.OpenAI() 
-
-        prompt = "Generate me an image, only drawing lines with no solid elements, \
+        client = openai.OpenAI()
+        
+        
+        le_prompt = "Generate me an image, only drawing lines with no solid elements, \
 following the given structure, where 'Subject' is the main idea being drawn; \
 'Detail' includes LOW, MEDIUM, and HIGH, where LOW is the minimum amount of \
 detail to have it be identified as the subject, MEDIUM is a reasonable amount \
@@ -28,11 +30,12 @@ Subject: " + user_prompt + "\n\
 Detail: " + quality + "\n\
 Colors: " + colors + "\n"
 
-        print(prompt)
+
+        le_prompt = "Generate me an image of a vaporwave computer"
 
         generation_response = client.images.generate(
             model="dall-e-3",
-            prompt=prompt,
+            prompt=le_prompt,
             n=1,
             size="1024x1024",
             response_format="url",
@@ -45,3 +48,48 @@ PROMPT = "A vaporwave computer"
 generator = ImageGenerator()
 
 generator.generate_image(PROMPT, "HIGH", "black, blue")
+'''
+'''
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
+
+class ImageGenerator():
+    def __init__(self):
+        load_dotenv()
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    def generate_image(self, user_prompt):
+        try:
+            response = self.client.images.generate(
+                model="dall-e-3",
+                prompt=user_prompt,
+                n=1,
+                size="1024x1024",
+                quality="standard",
+                style="natural",
+                response_format="url"
+            )
+            print(response.data[0].url)
+        except Exception as e:
+            print("Error:", e)
+
+PROMPT = "A red apple on a wooden table"
+generator = ImageGenerator()
+generator.generate_image(PROMPT)
+'''
+'''
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+try:
+    models = client.models.list()
+    for model in models:
+        print(model.id)
+except Exception as e:
+    print("Auth test error:", e)
+'''
