@@ -18,8 +18,6 @@ bool zero_x = false;
 #define step_z 4
 #define dir_z 7
 #define EN 8
-#define limit_servo 20
-#define qtd_servos 3
 
 // =============================== Definicao dos motores ===============================
 
@@ -31,6 +29,10 @@ bool finished_x = false;
 bool finished_y = false;
 
 // =============================== Definicao dos servos ===============================
+
+
+#define limit_servo 20
+#define qtd_servos 3
 
 Servo servos[qtd_servos];
 int offsets[qtd_servos] = { 10, 0, -10 };
@@ -84,8 +86,8 @@ int get_integer() {
   return dados.toInt();
 }
 
-bool is_running = false;
-int move_pos = 0;
+unsigned long last_step = 0;
+bool is_idle = true;
 
 void move_posicao(String coordinates) {
   int pos = 0;
@@ -197,6 +199,8 @@ void setup() {
   // }
   motor_y.setCurrentPosition(0);
   motor_z.setCurrentPosition(0);
+  
+  last_step = millis();
 }
 
 // =============================== Funcao de loop ===============================
@@ -206,7 +210,9 @@ void loop() {
     servos[i].write(180);
   }
 
-  if (Serial.available()) {
+  if (Serial.available()) {    
+    is_idle = false;
+    
     servos[servo_atual].write(180);
     
     delay(100);
@@ -231,6 +237,29 @@ void loop() {
         servos[servo_atual].write(limit_servo);
       }
       move_posicao(coordinates);
+      last_step = millis();
+    }
+  }
+
+  if (millis() - last_step > 30000 && !is_idle) {
+    is_idle = true;
+    
+    move_x(0);
+    move_y(0);
+
+    finished_x = false;
+    finished_y = false;
+
+    while (!finished_y || !finished_x) {
+      if (!motor_x.run()) {
+        finished_x = true;
+        motor_x.disableOutputs();
+      }
+      
+      if (!run_y()) {
+        finished_y = true;
+        disable_y();
+      }
     }
   }
 }
