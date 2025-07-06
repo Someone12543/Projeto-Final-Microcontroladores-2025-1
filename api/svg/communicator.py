@@ -35,6 +35,7 @@ class Svg_communicator:
             count += 1
                              
 
-communicator = Svg_communicator()
 
-communicator.communicate("maca.svg")
+if __name__ == "__main__":
+    communicator = Svg_communicator()
+    communicator.communicate("maca.svg")

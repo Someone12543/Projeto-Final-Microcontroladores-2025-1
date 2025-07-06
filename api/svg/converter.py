@@ -15,6 +15,7 @@ class Svg_converter:
     
     def convert(self, image_path, svg_path):
         # Load theimage
+
         image = Image.open(image_path).convert("L")  # Convert to grayscale
 
         # Convert image to numpy array
@@ -75,15 +76,15 @@ class Svg_converter:
             ax.scatter(x,y, c = 'r' if self.line_count % 2 == 0 else 'b')  # creating new scatter chart with updated data
             fig.canvas.draw()  # forcing the artist to redraw itself
 
-        anim = animation.FuncAnimation(fig, update, interval=0)
-        plt.show()
+        # anim = animation.FuncAnimation(fig, update, interval=0)
+        # plt.show()
         
         # Save the SVG
-        dwg.saveas(svg_path)
+        dwg.saveas('out.svg')
 
 
+if __name__ == '__main__':
+    Converter = Svg_converter()
 
-Converter = Svg_converter()
-
-#Converter.convert("vaporwave.png", "vaporwave.svg")
-Converter.convert("maca.png", "maca.svg")
+    #Converter.convert("vaporwave.png", "vaporwave.svg")
+    Converter.convert("maca.png", "maca.svg")

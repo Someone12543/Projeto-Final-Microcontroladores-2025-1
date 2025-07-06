@@ -18,24 +18,34 @@ type Message = {
 type Props = {
     id: string;
     chatLog: Message[];
-    onSend: (message: string) => void;
+    onSend: (userMessage: string, nivelDetalhe: string, cor:string[]) => void;
     theme: Theme;
     handleOpenModal: (message: string) => void;
+    handlePrint: (image: any) => void;
 };
+const NiveisDetalhe = {
+    baixo: 'baixo',
+    medio: 'medio',
+    alto: 'alto'
+}
+const Cores = {
+    RED: 'RED',
+    GREEN: 'GREEN',
+    BLUE: 'BLUE'
+}
 
-export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme, handleOpenModal }) => {
+export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme, handleOpenModal, handlePrint }) => {
     const [input, setInput] = useState('');
-    // const [nivelDetalhe, setNivelDetalhe] = useState(NiveisDetalhe.medio);
-    // const [cores, setCores] = useState([Cores.RED]);
+    const [nivelDetalhe, setNivelDetalhe] = useState(NiveisDetalhe.medio);
+    const [cores, setCores] = useState([Cores.RED]);
 
     const handleSend = () => {
         const trimmed = input.trim();
         if (trimmed.length > 0) {
-            onSend(trimmed);
+            onSend(trimmed, nivelDetalhe, cores);
             setInput('');
         }
     };
-
 
 
     return (
@@ -48,7 +58,7 @@ export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme, han
             }}
             theme={theme}
         >
-            <MenuComponent />
+            <MenuComponent onNivelChange={setNivelDetalhe} onColorChange={setCores}/>
 
             <Paper
                 sx={{
@@ -89,7 +99,7 @@ export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme, han
                                 <Typography variant="body2">{msg.content}</Typography>
                                 { msg.sender === 'printer' ?
                                 <Stack gap={2} sx={{display:'flex', flexDirection:'row'}}>
-                                    <Button variant="filled">Aceitar</Button>
+                                    <Button variant="filled" onClick={()=>{handlePrint('apple_mock.png')}}>Aceitar</Button>
                                     <Button variant="filled">Refazer</Button>
                                     <Button id={"editar"} key={"editar"} variant="filled" onClick={()=>handleOpenModal("apple_mock.png")}>Editar</Button>
                                 </Stack>: ""
