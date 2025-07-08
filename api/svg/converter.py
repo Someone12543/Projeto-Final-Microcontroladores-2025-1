@@ -80,7 +80,7 @@ class Svg_converter:
         # plt.show()
         
         # Save the SVG
-        dwg.saveas('out.svg')
+        dwg.saveas(svg_path)
 
 
 if __name__ == '__main__':

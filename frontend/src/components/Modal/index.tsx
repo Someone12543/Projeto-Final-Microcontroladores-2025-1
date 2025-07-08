@@ -19,20 +19,19 @@ const style = {
 type Props = {
     open: boolean,
     handleClose: () => void,
-    handleOpen: (image: string) => void,
-    image: string,
+    handleOpen: (image: any) => void,
+    image: any,
 }
 
 export const ModalComponent: React.FC<Props> = ({open, handleOpen, handleClose, image})=> {
 
     return (
-        <Box sx={{width:"80vw", height:"80vh"}}>
-            <Button onClick={handleOpen}>Open modal</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                sx={{width:"80vw", height:"80vh"}}
             >
                 <Box sx={style}>
                     <Box>
@@ -42,6 +41,5 @@ export const ModalComponent: React.FC<Props> = ({open, handleOpen, handleClose, 
 
                 </Box>
             </Modal>
-        </Box>
     );
 }

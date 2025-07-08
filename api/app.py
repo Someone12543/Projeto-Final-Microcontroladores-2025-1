@@ -5,12 +5,7 @@ from routes.ChatRoutes import api_chat
 app = FastAPI()
 
 origins = [
-    "*"  # This is the key: allows all origins
-    # You could also list specific origins like:
-    # "http://localhost",
-    # "http://localhost:8000",
-    # "http://localhost:3000", # Example for a React/Vue/Angular dev server
-    # "https://your-frontend-domain.com",
+    "*"
 ]
 
 app.add_middleware(

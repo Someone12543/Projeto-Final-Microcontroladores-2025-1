@@ -7,7 +7,7 @@ import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import {ChatComponent} from '../../components/ChatComponent';
 import {type JSX, useEffect} from "react";
-import {Button, Stack} from "@mui/material";
+import {Button, CircularProgress, Stack} from "@mui/material";
 import {ModalComponent} from "../../components/Modal";
 import { ReactPhotoEditor } from 'react-photo-editor';
 import axios from "axios";
@@ -18,6 +18,12 @@ type Message = {
     image?: string;
     timestamp: string;
 };
+
+type imageRequest = {
+    message: string;
+    nivelDetalhe: string;
+    cores: Array<string>;
+}
 
 const demoTheme = createTheme({
     cssVariables: {
@@ -51,7 +57,8 @@ const NAVIGATION: Navigation = [
 export default function ChatPage() {
     const [log, setLog] = React.useState<Message[]>([]);
     const [imageEdit, setImageEdit] = React.useState<File>();
-    const [editedImage, setEditedImage] = React.useState<File>();
+    const [editedImage, setEditedImage] = React.useState<any>();
+    const [loading, setLoading] = React.useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -62,7 +69,7 @@ export default function ChatPage() {
         handlePrint(editedImage);
     };
     const handleCloseModalEnviar = () => setOpenModalEnviar(false);
-    const [imageModalEnviar, setImageModalEnviar] = React.useState<string>();
+    const [imageModalEnviar, setImageModalEnviar] = React.useState<any>();
 
     const createFileFromPublicImage = async (imagePath: string): Promise<File> => {
         const response = await fetch(imagePath);
@@ -76,21 +83,18 @@ export default function ChatPage() {
         return file;
     };
 
-    const handleOpenModal = async (image: string)=>{
-        await createFileFromPublicImage(image)
-            .then(result => {
-                setImageEdit(result);
-                handleOpen();
-            })
-            .catch(error => {
-                console.error(error);
-            })
-            .finally(() => {
-            })
+    const handleOpenModal = async (image)=>{
+        const arquivo =  new File([image], 'imagemEditada', {
+            type: image.type,
+            lastModified: new Date()
+        });
+        setImageEdit(arquivo);
+        handleOpen();
     }
 
     const handlePrint = async (file) => {
         let imageFile = null;
+        console.log(file);
         if (file.type !== File) {
             const imageUrl = `${import.meta.env.BASE_URL}${file}`; // Adjust path if it's in a subfolder like public/images/apple_mock.png
 
@@ -112,9 +116,12 @@ export default function ChatPage() {
             imageFile=file;
         }
         const formData = new FormData();
+        const newFile = new File([file], "image.png", { type: "image/png" });
+        console.log(newFile);
         // The key 'file' must match the parameter name in your FastAPI endpoint:
         // async def send_chat(file: Annotated[UploadFile, File(...)]):
-        formData.append('file', imageFile);
+        formData.append('file', newFile);
+
 
         // 5. Send the FormData using Axios
         //    Axios will automatically set the 'Content-Type' to 'multipart/form-data'
@@ -123,34 +130,70 @@ export default function ChatPage() {
         console.log('Successfully sent file:', axiosResponse.data);
         alert('Imagem enviada com sucesso!');
     }
-    }
 
         const handleSaveImage = async (editedFile) =>{
+            console.log(editedFile);
             handleClose();
             const url = URL.createObjectURL(editedFile);
             setImageModalEnviar(url);
             handleOpenModalEnviar();
+            handlePrint(editedFile);
     }
 
-    const handleSend = async (userMessage: string, nivelDetalhe: string, cor:string) => {
-        // TODO: API CALL
-        const sourceImage = await createFileFromPublicImage("apple_mock.png");
-        const url = URL.createObjectURL(sourceImage);
+    const handleSendImage = (img)=>{
+        handleClose();
+        const url = URL.createObjectURL(img);
+        setImageModalEnviar(url);
+        handleOpenModalEnviar();
+        handlePrint(img);
+    }
 
-        const now = new Date().toISOString();
-        setLog((prev) => [
-            ...prev,
-            { sender: 'user', content: userMessage, timestamp: now },
-            {
-                sender: 'printer',
-                content: (
-                    <Box>
-                    <Typography>{`Recebido: "${userMessage}". Processando...`}</Typography>
-                        <img src={editedImage ? editedImage : url} style={{ width: '100%', maxWidth: '500px', borderRadius: '8px' }}/>
-                    </Box>),
-                timestamp: now,
-            },
-        ]);
+    const handleSend = async (userMessage: string, nivelDetalhe: string, cores:Array<string>) => {
+        // TODO: API CALL
+        setLoading(true);
+        const data: imageRequest = {
+            message: userMessage,
+            cores: cores,
+            nivelDetalhe: nivelDetalhe
+        };
+        const now = new Date().toISOString()
+        await axios.post('http://localhost:8080/api/chats/request-image', data, {responseType: "blob"}).then((res)=> {
+            const result = res.data;
+            console.log(res);
+            const url:string = URL.createObjectURL(result);
+            setLog((prevState) =>[
+                ...prevState,
+                {sender: 'user', content: userMessage, timestamp: now},
+                {
+                    sender: 'printer',
+                    content: (
+                        <Box>
+                            <Typography>{`Recebido: "${userMessage}". Processando...`}</Typography>
+                            <img src={editedImage ? editedImage : url} style={{ width: '100%', maxWidth: '500px', borderRadius: '8px' }}/>
+                        </Box>),
+                    timestamp: now,
+                    img: result,
+                },
+            ])
+        }).finally(()=>{setLoading(false)});
+
+
+        // const sourceImage = await createFileFromPublicImage("apple_mock.png");
+        // const url = URL.createObjectURL(sourceImage);
+        //
+        // setLog((prev) => [
+        //     ...prev,
+        //     { sender: 'user', content: userMessage, timestamp: now },
+        //     {
+        //         sender: 'printer',
+        //         content: (
+        //             <Box>
+        //             <Typography>{`Recebido: "${userMessage}". Processando...`}</Typography>
+        //                 <img src={editedImage ? editedImage : url} style={{ width: '100%', maxWidth: '500px', borderRadius: '8px' }}/>
+        //             </Box>),
+        //         timestamp: now,
+        //     },
+        // ]);
     };
 
     return (
@@ -164,15 +207,26 @@ export default function ChatPage() {
             }}
         >
             <DashboardLayout >
-                <ChatComponent id={"001"} chatLog={log} image={editedImage ? editedImage:null} onSend={handleSend} theme={demoTheme} handleOpenModal={handleOpenModal} handlePrint={handlePrint}/>
-            </DashboardLayout>
+                { loading ? <Box sx={{ margin: "0 auto"}}><CircularProgress/> </Box>:
+                <ChatComponent
+                    id={"001"}
+                    chatLog={log}
+                    image={editedImage ? editedImage:null}
+                    onSend={handleSend}
+                    theme={demoTheme}
+                    handleOpenModal={handleOpenModal}
+                    handleAceitar={(url)=>{handleSendImage(url)}}
+                    handleRedo={()=>{handleSend("Refazer", "medio", ["black"])}}
+                    />
+                }
+                <ModalComponent open={openModalEnviar} handleClose={handleCloseModalEnviar} handleOpen={handleOpenModalEnviar} image={imageModalEnviar}/>
+                </DashboardLayout>
             <ReactPhotoEditor
                 open={open}
                 onClose={handleClose}
                 file={imageEdit}
                 onSaveImage={handleSaveImage}
             />
-            <ModalComponent open={openModalEnviar} handleClose={handleCloseModalEnviar} handleOpen={handleOpenModalEnviar} image={imageModalEnviar}/>
         </AppProvider>
     );
 }

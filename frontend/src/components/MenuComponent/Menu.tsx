@@ -10,14 +10,14 @@ type Props = {
     onColorChange: (cor: Cores) => void;
 }
 
-enum NiveisDetalhe {
-    alto = "HIGH",
-    medio = "MEDIUM",
-    baixo = "LOW",
+const NiveisDetalhe = {
+    alto: "HIGH",
+    medio: "MEDIUM",
+    baixo: "LOW",
 }
 
 const coresArray = ["VERMELHO", "VERDE", "AZUL"];
-const niveisDetalhesArray = Object.entries(NiveisDetalhe).map(([value]) => {return value});
+const niveisDetalhesArray = ["HIGH", "MEDIUM", "LOW"];
 
 export const MenuComponent: React.FC<Props> = ({ onNivelChange, onColorChange}) =>{
     const [nivelDetalhe, setNivelDetalhe] = useState(NiveisDetalhe.medio);
@@ -37,6 +37,7 @@ export const MenuComponent: React.FC<Props> = ({ onNivelChange, onColorChange}) 
             <InputLabel id={"Nivel"}>Nivel de Detalhe</InputLabel>
             <Select
                 value={nivelDetalhe}
+                defaultValue={NiveisDetalhe.medio}
                 label={"detalhe"}
                 onChange={(event)=>{
                     setNivelDetalhe(event.target.value);

@@ -12,3 +12,8 @@ class SendMessage(BaseModel):
 class ChatModel(BaseModel):
     id: str
     chats: List[dict]
+
+class ImageRequestModel(BaseModel):
+    message: str
+    nivelDetalhe: str
+    cores: List[str]
