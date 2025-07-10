@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Body, HTTPException, UploadFile, File
-from models.chat_models import SendMessage, GetChat, ImageRequestModel
+from fastapi import APIRouter, Body, HTTPException, UploadFile, File, Form
+from models.chat_models import SendMessage, GetChat, ImageRequestModel, SendToCNCModel
 from controllers.chat_controller import ChatController
-from typing import Annotated
+from typing import Annotated, List
 from fastapi.responses import FileResponse
 
 
@@ -25,9 +25,9 @@ async def request_image(body: ImageRequestModel = Body(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @api_chat.post("/send")
-async def send_chat(file: Annotated[UploadFile, File(...)]):
+async def send_chat( colors: str = Form(...),file: UploadFile = File(...)):
     try:
-        response = await ChatController.send_to_cnc(file)
-        return {"response": response}
+        response = await ChatController.send_to_cnc(file, colors)
+        return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

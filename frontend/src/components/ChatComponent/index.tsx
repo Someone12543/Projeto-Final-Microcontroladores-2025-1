@@ -30,15 +30,15 @@ const NiveisDetalhe = {
     baixo: "LOW",
 }
 const Cores = {
-    RED: 'RED',
-    GREEN: 'GREEN',
-    BLUE: 'BLUE'
+    PRETO: 'black',
+    VERMELHO: 'red',
+    AZUL: 'blue'
 }
 
 export const ChatComponent: React.FC<Props> = ({ id, chatLog, onSend, theme, handleOpenModal, handleAceitar, handleRedo }) => {
     const [input, setInput] = useState('');
     const [nivelDetalhe, setNivelDetalhe] = useState(NiveisDetalhe.medio);
-    const [cores, setCores] = useState([Cores.RED]);
+    const [cores, setCores] = useState([Cores.PRETO]);
 
     const handleSend = () => {
         const trimmed = input.trim();

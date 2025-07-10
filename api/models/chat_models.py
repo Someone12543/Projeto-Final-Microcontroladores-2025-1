@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Annotated
+from fastapi import UploadFile, File
 
 
 class GetChat(BaseModel):
@@ -17,3 +18,7 @@ class ImageRequestModel(BaseModel):
     message: str
     nivelDetalhe: str
     cores: List[str]
+
+class SendToCNCModel(BaseModel):
+    colors: str
+    file: Annotated[UploadFile, File(...)]

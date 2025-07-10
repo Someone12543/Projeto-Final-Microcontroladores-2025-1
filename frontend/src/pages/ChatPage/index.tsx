@@ -62,7 +62,7 @@ export default function ChatPage() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    const [colors, setColores] = React.useState<Array<string>>([]);
     const [openModalEnviar, setOpenModalEnviar] = React.useState(false);
     const handleOpenModalEnviar = () => {
         setOpenModalEnviar(true)
@@ -116,16 +116,15 @@ export default function ChatPage() {
             imageFile=file;
         }
         const formData = new FormData();
-        const newFile = new File([file], "image.png", { type: "image/png" });
-        console.log(newFile);
-        // The key 'file' must match the parameter name in your FastAPI endpoint:
-        // async def send_chat(file: Annotated[UploadFile, File(...)]):
-        formData.append('file', newFile);
+        formData.append('colors', colors.join(', '));
+        formData.append('file', new File([file], "image.png", { type: "image/png" }));
+        console.log(formData);
 
-
-        // 5. Send the FormData using Axios
-        //    Axios will automatically set the 'Content-Type' to 'multipart/form-data'
-        const axiosResponse = await axios.post('http://localhost:8080/api/chats/send', formData);
+        const axiosResponse = await axios.post('http://localhost:8080/api/chats/send', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
 
         console.log('Successfully sent file:', axiosResponse.data);
         alert('Imagem enviada com sucesso!');
@@ -157,10 +156,12 @@ export default function ChatPage() {
             nivelDetalhe: nivelDetalhe
         };
         const now = new Date().toISOString()
+        console.log(data);
         await axios.post('http://localhost:8080/api/chats/request-image', data, {responseType: "blob"}).then((res)=> {
             const result = res.data;
             console.log(res);
             const url:string = URL.createObjectURL(result);
+            setColores(cores);
             setLog((prevState) =>[
                 ...prevState,
                 {sender: 'user', content: userMessage, timestamp: now},
@@ -207,7 +208,7 @@ export default function ChatPage() {
             }}
         >
             <DashboardLayout >
-                { loading ? <Box sx={{ margin: "0 auto"}}><CircularProgress/> </Box>:
+                { loading ? <Box sx={{margin: '0 auto'}}><CircularProgress/></Box> :
                 <ChatComponent
                     id={"001"}
                     chatLog={log}

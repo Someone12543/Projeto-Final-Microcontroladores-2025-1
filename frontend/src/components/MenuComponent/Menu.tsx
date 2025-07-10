@@ -16,12 +16,12 @@ const NiveisDetalhe = {
     baixo: "LOW",
 }
 
-const coresArray = ["VERMELHO", "VERDE", "AZUL"];
+const coresArray = ["red", "black", "blue"];
 const niveisDetalhesArray = ["HIGH", "MEDIUM", "LOW"];
 
 export const MenuComponent: React.FC<Props> = ({ onNivelChange, onColorChange}) =>{
     const [nivelDetalhe, setNivelDetalhe] = useState(NiveisDetalhe.medio);
-    const [cores, setCores] = useState([coresArray[0]]);
+    const [cores, setCores] = useState([coresArray[1]]);
 
     const handleChange = (event) => {
         const {

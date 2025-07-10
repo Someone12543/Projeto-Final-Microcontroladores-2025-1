@@ -14,9 +14,10 @@ class Svg_communicator:
             raise e
 
         count = 1
-        infos = ET.parse(filename)
-        width = infos.attrib.get('width')
-        height = infos.attrib.get('height')
+        infos = ET.parse(filename).getroot()
+        width = infos.get('width')
+        height = infos.get('height')
+
         
         svg = SVG.parse(filename)
         for element in svg:
@@ -32,7 +33,7 @@ class Svg_communicator:
             sleep(0.05)
                               
             for point in element.points:
-                if (width < 600) or (height < 600):
+                if (int(width) < 600) or (int(height) < 600):
                     ponto = str(int(point.x) * 2) + ',' + str(int(point.y) * 2) + '\n'
                 else:
                     ponto = str(int(point.x) ) + ',' + str(int(point.y)) + '\n'

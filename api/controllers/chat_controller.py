@@ -40,7 +40,7 @@ class ChatController:
 
 
     @classmethod
-    async def send_to_cnc(cls, file: Annotated[UploadFile, File(...)]):
+    async def send_to_cnc(cls, file: Annotated[UploadFile, File(...)], colors: str):
         original_filename_base = os.path.splitext(file.filename)[0]
         svg_output_filename = f"{original_filename_base}.svg"
         svg_output_path = os.path.join('output/', svg_output_filename)
@@ -62,13 +62,13 @@ class ChatController:
             path = 'arquivo.svg'
 
             try:
-                conversor.convert(image_stream, svg_output_path)
+                conversor.convert(image_stream, svg_output_path, colors)
             except Exception as e:
                 raise e
         communicator = Svg_communicator()
 
         print('comunicando')
-        communicator.communicate(file.filename)
+        communicator.communicate(svg_output_path)
 
 
 
