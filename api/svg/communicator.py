@@ -26,6 +26,10 @@ class Svg_communicator:
             qtd = str(len(element.points)) + "\n"            
             meu_serial.write( (qtd).encode("UTF-8"))
             sleep(0.05)
+
+            color = str(len(element.stroke)) + "\n"            
+            meu_serial.write( (color).encode("UTF-8"))
+            sleep(0.05)
                               
             for point in element.points:
                 if (width < 600) or (height < 600):
