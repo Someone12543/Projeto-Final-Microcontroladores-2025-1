@@ -71,7 +71,7 @@ Para rodar o frontend, siga os passos abaixo:
    npm run dev
    ```
 
-## CNC
+## :robot: CNC
 
 Para rodar o arduino que controla a CNC é recomendado usar a IDE **ArduinoIDE** e será necessário as seguintes bibliotecas:
 
@@ -81,6 +81,6 @@ Para rodar o arduino que controla a CNC é recomendado usar a IDE **ArduinoIDE**
 
 3. Servo
 
-Após ter essas bibliotecas instaladas, envie o código da CNC para o arduino, com as conexões devidamente feitas de acordo com o esquemático. 
+Após ter essas bibliotecas instaladas, envie o [código da CNC](./CNC/Plotter/plotter.ino) para o arduino, com as conexões devidamente feitas de acordo com o esquemático. 
 
-Após o envio do código, permaneça com o arduino conectado e verifique em qual porta ele está no conectado no PC e ajuste o communicator.py para ficar de acordo.
+Após o envio do código, permaneça com o arduino conectado e verifique em qual porta ele está no conectado no PC e ajuste o [communicator.py](./api/svg/communicator.py#L12-#L14) para ficar de acordo.
