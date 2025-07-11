@@ -81,6 +81,25 @@ Para rodar o arduino que controla a CNC é recomendado usar a IDE **ArduinoIDE**
 
 3. Servo
 
-Após ter essas bibliotecas instaladas, envie o [código da CNC](./CNC/Plotter/plotter.ino) para o arduino, com as conexões devidamente feitas de acordo com o esquemático. 
+   - Usando a versão **recente** da IDE: <br/>
+     <img width="301" height="135" alt="image" src="https://github.com/user-attachments/assets/0f0231c8-25c1-42bd-8e9b-15342e5d6d04" /> <br/><br/>
+
+   - Usando a versão **antiga** da IDE: <br/>
+     <img width="618" height="355" alt="image" src="https://github.com/user-attachments/assets/e0dd93d8-a66a-48ac-a094-0cf93c9e1782" /> <br/><br/>
+
+
+Após ter essas bibliotecas instaladas, envie o [código da CNC](./CNC/Plotter/plotter.ino) para o arduino, com as conexões devidamente feitas de acordo com o [esquemático](#esquemático-do-projeto). 
 
 Após o envio do código, permaneça com o arduino conectado e verifique em qual porta ele está no conectado no PC e ajuste o [communicator.py](./api/svg/communicator.py#L12-#L14) para ficar de acordo.
+   - **Windows**:
+      ```python
+      meu_serial = Serial("COM[número]", baudrate=115200)
+      ```
+
+   - **Linux**:
+     ```python
+      meu_serial = Serial("/dev/tty[porta]", baudrate=115200)
+     ```
+
+> [!NOTE]
+> Com o ArduinoIDE é possível achar qual é a porta em que o microcontrolador está conectado
