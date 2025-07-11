@@ -20,3 +20,56 @@ O projeto possui como objetivo a criação de uma máquina de desenhar as imagen
 3. Enquanto a IA está gerando a imagem, fica carregando, e quando terminar de carregar é necessário scrollar até embaixo para ver o último resultado. 
 4. Se você quiser editar a imagem gerada, clique no botão para **editar** e abrirá um pop-up para fazer tal. 
 5. Quando estiver do seu agrado, clique em **salvar**, se estiver editando, ou em **enviar** se não fez nenhuma modificação na imagem.
+
+# 📦 Projeto - Instruções de Execução
+
+## 🛠️ Backend (API)
+
+Para rodar o backend, siga os passos abaixo:
+
+1. Abra o terminal na pasta `api`.
+
+2. Crie um ambiente virtual:
+   ```bash
+   python3 -m venv venv
+   ```
+
+3. Ative o ambiente virtual:
+
+   - **Windows**:
+     ```bash
+     venv\Scripts\activate
+     ```
+
+   - **Linux/Mac**:
+     ```bash
+     source venv/bin/activate
+     ```
+
+4. Instale as dependências:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. Execute o backend:
+   ```bash
+   python main.py
+   ```
+
+---
+
+## 💻 Frontend
+
+Para rodar o frontend, siga os passos abaixo:
+
+1. Abra o terminal na pasta `frontend`.
+
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+3. Rode o projeto:
+   ```bash
+   npm run dev
+   
