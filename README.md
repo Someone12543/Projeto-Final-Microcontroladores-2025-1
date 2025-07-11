@@ -9,7 +9,7 @@ O projeto possui como objetivo a criação de uma máquina de desenhar as imagen
 - 2 fontes (uma para os motores outra para os servos).
 
 ## Esquemático do projeto
-<img width="1325" height="840" alt="image" src="https://github.com/user-attachments/assets/eff6d271-84ac-4ee2-9756-bbc5c140397b" /> <br/>
+<img width="1155" height="757" alt="image" src="https://github.com/user-attachments/assets/9375232d-3d8f-42fb-81f9-4935b1c15885" /> <br/>
 
 > [!Note]  
 > Para os motores, alimente-os com 12 V. Para os servos, alimente-os com 5 V.
