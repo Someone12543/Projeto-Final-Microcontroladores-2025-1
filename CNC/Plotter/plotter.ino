@@ -31,11 +31,11 @@ bool finished_y = false;
 // =============================== Definicao dos servos ===============================
 
 
-#define limit_servo 20
+#define limit_servo 35
 #define qtd_servos 3
 
 Servo servos[qtd_servos];
-int offsets[qtd_servos] = { 10, 0, -10 };
+int offsets[qtd_servos] = { 300, 130, 0 };
 int servo_atual = 1;
 
 // =============================== Funcoes em Y ===============================
@@ -66,7 +66,9 @@ void move_x(int dist) {
 
 void move_y(int dist) {
   enable_y();
+
   motor_y.moveTo(dist);
+
   motor_z.moveTo(dist);
 
   finished_y = false;
@@ -78,6 +80,8 @@ void move_x_y(int distx, int disty) {
 }
 
 // =============================== Drawer plotter ===============================
+
+#define time_idle 15000
 
 int get_integer() {
   String dados = Serial.readStringUntil('\n');
@@ -97,7 +101,7 @@ void move_posicao(String coordinates) {
     x = 10 * x + coordinates.substring(pos, pos + 1).toInt();
     pos++;
   }
-  move_x(x);
+  move_x(x + offsets[servo_atual]);
   
   pos++;
   int y = 0;
@@ -141,15 +145,15 @@ void setup() {
   // put your setup code here, to run once:
   motor_x.setEnablePin(EN);
   motor_x.setMaxSpeed(200.0);
-  motor_x.setAcceleration(100.0);
+  motor_x.setAcceleration(50.0);
 
   motor_y.setEnablePin(EN);
   motor_y.setMaxSpeed(200.0);
-  motor_y.setAcceleration(100.0);
+  motor_y.setAcceleration(50.0);
 
   motor_z.setEnablePin(EN);
   motor_z.setMaxSpeed(200.0);
-  motor_z.setAcceleration(100.0);
+  motor_z.setAcceleration(50.0);
 
   Serial.begin(115200);
   while(!Serial);
@@ -223,6 +227,11 @@ void loop() {
 
     int qtd = get_integer();
 
+    if (qtd < 8) {
+      delay(500);
+      servos[servo_atual].write(limit_servo);
+    }
+
     for (int i = 0; i < qtd; i++) {
       while (!Serial.available());
 
@@ -241,7 +250,7 @@ void loop() {
     }
   }
 
-  if (millis() - last_step > 30000 && !is_idle) {
+  if (millis() - last_step > time_idle && !is_idle) {
     is_idle = true;
     
     move_x(0);
