@@ -69,6 +69,3 @@ class ChatController:
 
         print('comunicando')
         communicator.communicate(svg_output_path)
-
-
-
