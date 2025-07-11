@@ -11,9 +11,6 @@ O projeto possui como objetivo a criação de uma máquina de desenhar as imagen
 ## Esquemático do projeto
 <img width="1155" height="757" alt="image" src="https://github.com/user-attachments/assets/9375232d-3d8f-42fb-81f9-4935b1c15885" /> <br/>
 
-> [!Note]  
-> Para os motores, alimente-os com 12 V. Para os servos, alimente-os com 5 V.
-
 ## Funcionamento
 1. Para funcionar, tanto o frontend quanto o backend devem estar rodando ao mesmo tempo.
 2. Após, abra-se o frontend no navegador e aparecerá uma tela de chat. Nela, você digita o que quer que a IA gere, de preferência em inglês, e clica "ENTER" ou na seta para enviar.
@@ -72,4 +69,18 @@ Para rodar o frontend, siga os passos abaixo:
 3. Rode o projeto:
    ```bash
    npm run dev
+   ```
+
+## CNC
+
+Para rodar o arduino que controla a CNC é recomendado usar a IDE **ArduinoIDE** e será necessário as seguintes bibliotecas:
+
+1. AccelStepper
    
+2. GFButtons
+
+3. Servo
+
+Após ter essas bibliotecas instaladas, envie o código da CNC para o arduino, com as conexões devidamente feitas de acordo com o esquemático. 
+
+Após o envio do código, permaneça com o arduino conectado e verifique em qual porta ele está no conectado no PC e ajuste o communicator.py para ficar de acordo.
