@@ -88,7 +88,7 @@ Para rodar o arduino que controla a CNC é recomendado usar a IDE **ArduinoIDE**
      <img width="618" height="355" alt="image" src="https://github.com/user-attachments/assets/e0dd93d8-a66a-48ac-a094-0cf93c9e1782" /> <br/><br/>
 
 
-Após ter essas bibliotecas instaladas, envie o [código da CNC](./CNC/Plotter/plotter.ino) para o arduino, com as conexões devidamente feitas de acordo com o [esquemático](#esquemático-do-projeto). 
+Após ter essas bibliotecas instaladas, envie o [código da CNC - plotter -](./CNC/Plotter/plotter.ino) para o arduino, com as conexões devidamente feitas de acordo com o [esquemático](#esquemático-do-projeto). 
 
 Após o envio do código, permaneça com o arduino conectado e verifique em qual porta ele está no conectado no PC e ajuste o [communicator.py](./api/svg/communicator.py#L12-#L14) para ficar de acordo.
    - **Windows**:
